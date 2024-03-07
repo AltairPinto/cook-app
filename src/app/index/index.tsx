@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Alert, ScrollView, Text, View } from "react-native";
+import { Alert, Text, View } from "react-native";
 import { router } from "expo-router";
 
 import { styles } from "./styles";
@@ -7,6 +7,7 @@ import { styles } from "./styles";
 import { Ingredient } from "@/components/Ingredient";
 import { Selected } from "@/components/Selected";
 import { services } from "@/services";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 export default function Index() {
   const [selected, setSelected] = useState<string[]>([]);
@@ -29,7 +30,7 @@ export default function Index() {
   }
 
   function handleSearch() {
-    router.navigate("/recipes/");
+    router.navigate("/recipes/" + selected);
   }
 
   useEffect(() => {
@@ -47,9 +48,10 @@ export default function Index() {
         Descubra receitas baseadas nos produtos que você escolheu.
       </Text>
 
-      <ScrollView
+      <Animated.ScrollView
         contentContainerStyle={styles.ingredients}
         showsVerticalScrollIndicator={false}
+        entering={FadeInDown}
       >
         {ingredients?.map(({ id, name, image }) => (
           <Ingredient
@@ -60,7 +62,7 @@ export default function Index() {
             onPress={() => handleToggleSelected(String(id))}
           />
         ))}
-      </ScrollView>
+      </Animated.ScrollView>
 
       {selected.length > 0 && (
         <Selected
