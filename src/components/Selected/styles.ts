@@ -1,5 +1,5 @@
-import { theme } from "@/theme";
-import { StyleSheet } from "react-native";
+import { theme } from "@/theme"
+import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
   container: {
@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignContent: "center",
+    alignItems: "center",
     marginBottom: 34,
   },
   label: {
@@ -22,4 +22,4 @@ export const styles = StyleSheet.create({
     fontSize: theme.fonts.size.body.sm,
     fontFamily: theme.fonts.family.regular,
   },
-});
+})

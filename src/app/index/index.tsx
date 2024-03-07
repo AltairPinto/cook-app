@@ -5,6 +5,7 @@ import { styles } from "./styles";
 
 import { Ingredient } from "@/components/Ingredient";
 import { Selected } from "@/components/Selected";
+import { router } from "expo-router";
 
 export default function Index() {
   const [selected, setSelected] = useState<string[]>([]);
@@ -23,6 +24,10 @@ export default function Index() {
       },
       { text: "Sim", onPress: () => setSelected([]) },
     ]);
+  }
+
+  function handleSearch() {
+    router.navigate("/recipes/");
   }
 
   return (
@@ -44,17 +49,18 @@ export default function Index() {
           <Ingredient
             key={index}
             name="Maçã"
-            image=""
+            image="apple"
             selected={selected.includes(String(index))}
             onPress={() => handleToggleSelected(String(index))}
           />
         ))}
       </ScrollView>
+
       {selected.length > 0 && (
         <Selected
           quantity={selected.length}
-          onClear={() => handleClear()}
-          onSearch={() => {}}
+          onClear={handleClear}
+          onSearch={handleSearch}
         />
       )}
     </View>
