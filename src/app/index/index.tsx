@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { ActivityIndicator, Alert, Text, TextInput, View } from "react-native";
 import { router } from "expo-router";
 
@@ -14,6 +14,7 @@ export default function Index() {
   const [ingredients, setIngredients] = useState<IngredientResponse[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [allItems, setAllItems] = useState<IngredientResponse[]>([]);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   function handleToggleSelected(value: string) {
     if (selected.includes(value))
@@ -72,6 +73,8 @@ export default function Index() {
             value={searchText}
             onChangeText={handleFilteredItems}
             placeholder="Filtrar por ingrediente..."
+            onFocus={() => setIsSearching(true)}
+            onBlur={() => setIsSearching(false)}
           />
 
           <Animated.ScrollView
@@ -93,16 +96,15 @@ export default function Index() {
               <Text>Nenhum produto encontrado</Text>
             )}
           </Animated.ScrollView>
-
-          {selected.length > 0 && (
-            <Selected
-              quantity={selected.length}
-              onClear={handleClear}
-              onSearch={handleSearch}
-            />
-          )}
         </View>
       </Suspense>
+      {selected.length > 0 && !isSearching && (
+        <Selected
+          quantity={selected.length}
+          onClear={handleClear}
+          onSearch={handleSearch}
+        />
+      )}
     </View>
   );
 }

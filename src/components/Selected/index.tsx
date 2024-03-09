@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Keyboard } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Animated, { BounceOutDown, SlideInDown } from "react-native-reanimated";
 
@@ -22,6 +22,7 @@ export function Selected({ quantity, onClear, onSearch }: Props) {
       entering={SlideInDown.duration(500)}
       exiting={BounceOutDown}
       style={styles.container}
+      id="selected"
     >
       <View style={styles.header}>
         <Text style={styles.label}>
