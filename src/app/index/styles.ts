@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     fontSize: theme.fonts.size.body.md,
     fontFamily: theme.fonts.family.regular,
     marginTop: 12,
-    marginBottom: 38,
+    marginBottom: 12,
     color: theme.colors.gray_400,
   },
   ingredients: {
@@ -27,5 +27,13 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     paddingBottom: 20,
     gap: 12,
+  },
+  textInput: {
+    borderRadius: theme.borderRadius.md,
+    fontFamily: theme.fonts.family.medium,
+    borderWidth: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    marginBottom: 18,
   },
 });

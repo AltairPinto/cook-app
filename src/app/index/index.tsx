@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Alert, Text, View } from "react-native";
+import { useState, useEffect, Suspense } from "react";
+import { ActivityIndicator, Alert, Text, TextInput, View } from "react-native";
 import { router } from "expo-router";
 
 import { styles } from "./styles";
@@ -12,6 +12,8 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 export default function Index() {
   const [selected, setSelected] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<IngredientResponse[]>([]);
+  const [searchText, setSearchText] = useState<string>("");
+  const [allItems, setAllItems] = useState<IngredientResponse[]>([]);
 
   function handleToggleSelected(value: string) {
     if (selected.includes(value))
@@ -33,8 +35,23 @@ export default function Index() {
     router.navigate("/recipes/" + selected);
   }
 
+  function handleFilteredItems(value: string) {
+    setSearchText(value);
+    if (!value) return setIngredients(allItems);
+    setTimeout(() => {
+      setIngredients(
+        allItems.filter((ingredient) =>
+          ingredient.name.toLowerCase().includes(value.toLowerCase())
+        )
+      );
+    }, 500);
+  }
+
   useEffect(() => {
-    services.ingredients.findAll().then(setIngredients);
+    services.ingredients.findAll().then((items) => {
+      setAllItems(items);
+      setIngredients(items);
+    });
   }, []);
 
   return (
@@ -48,29 +65,44 @@ export default function Index() {
         Descubra receitas baseadas nos produtos que você escolheu.
       </Text>
 
-      <Animated.ScrollView
-        contentContainerStyle={styles.ingredients}
-        showsVerticalScrollIndicator={false}
-        entering={FadeInDown}
-      >
-        {ingredients?.map(({ id, name, image }) => (
-          <Ingredient
-            key={id}
-            name={name}
-            image={`${services.storage.imagePath}/${image}`}
-            selected={selected.includes(String(id))}
-            onPress={() => handleToggleSelected(String(id))}
+      <Suspense fallback={<ActivityIndicator />}>
+        <View>
+          <TextInput
+            style={styles.textInput}
+            value={searchText}
+            onChangeText={handleFilteredItems}
+            placeholder="Filtrar por ingrediente..."
           />
-        ))}
-      </Animated.ScrollView>
 
-      {selected.length > 0 && (
-        <Selected
-          quantity={selected.length}
-          onClear={handleClear}
-          onSearch={handleSearch}
-        />
-      )}
+          <Animated.ScrollView
+            contentContainerStyle={styles.ingredients}
+            showsVerticalScrollIndicator={false}
+            entering={FadeInDown}
+          >
+            {ingredients.length ? (
+              ingredients.map(({ id, name, image }) => (
+                <Ingredient
+                  key={id}
+                  name={name}
+                  image={`${services.storage.imagePath}/${image}`}
+                  selected={selected.includes(String(id))}
+                  onPress={() => handleToggleSelected(String(id))}
+                />
+              ))
+            ) : (
+              <Text>Nenhum produto encontrado</Text>
+            )}
+          </Animated.ScrollView>
+
+          {selected.length > 0 && (
+            <Selected
+              quantity={selected.length}
+              onClear={handleClear}
+              onSearch={handleSearch}
+            />
+          )}
+        </View>
+      </Suspense>
     </View>
   );
 }
