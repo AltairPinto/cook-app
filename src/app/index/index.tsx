@@ -1,13 +1,14 @@
 import React, { useState, useEffect, Suspense } from "react";
-import { ActivityIndicator, Alert, Text, TextInput, View } from "react-native";
+import { Alert, Text, TextInput, View } from "react-native";
 import { router } from "expo-router";
-
-import { styles } from "./styles";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { Ingredient } from "@/components/Ingredient";
 import { Selected } from "@/components/Selected";
+import { Loading } from "@/components/Loading";
+
 import { services } from "@/services";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import { styles } from "./styles";
 
 export default function Index() {
   const [selected, setSelected] = useState<string[]>([]);
@@ -66,7 +67,7 @@ export default function Index() {
         Descubra receitas baseadas nos produtos que você escolheu.
       </Text>
 
-      <Suspense fallback={<ActivityIndicator />}>
+      <Suspense fallback={<Loading />}>
         <View>
           <TextInput
             style={styles.textInput}
