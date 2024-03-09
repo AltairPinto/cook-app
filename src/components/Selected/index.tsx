@@ -22,7 +22,6 @@ export function Selected({ quantity, onClear, onSearch }: Props) {
       entering={SlideInDown.duration(500)}
       exiting={BounceOutDown}
       style={styles.container}
-      id="selected"
     >
       <View style={styles.header}>
         <Text style={styles.label}>
